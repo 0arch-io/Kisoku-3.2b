@@ -1,0 +1,7 @@
+*.pyc
+__pycache__/
+*.log
+checkpoints/*.pkl
+.DS_Store
+venv/
+.vscode/
