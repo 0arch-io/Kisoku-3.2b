@@ -21,18 +21,18 @@ OpenMind 2.7B is a completely open community-trained language model with modern 
 ### Modern Components
 
 ```
-Model: 3.15B parameters
+Model: 3.2B parameters
 - Vocabulary: 50,257 tokens (GPT-2 tokenizer)
-- Layers: 32 transformer blocks
-- Hidden Dimension: 2,560
-- Feed-Forward Dimension: 10,240
+- Layers: 34 transformer blocks
+- Hidden Dimension: 2,880
+- Feed-Forward Dimension: 7,680
 - Sequence Length: 1,024 tokens
 
 Attention (GQA):
-- Query Heads: 20
+- Query Heads: 24
 - Key/Value Heads: 4 (Grouped Query Attention)
-- Head Dimension: 128
-- Saves 336M parameters vs Multi-Head Attention!
+- Head Dimension: 120
+- Saves 400M+ parameters vs Multi-Head Attention!
 
 Position Embeddings: RoPE (Rotary Position Embeddings)
 - No learned position embeddings
@@ -74,48 +74,58 @@ Normalization: RMSNorm
 
 ### Dataset
 
-**FineWeb-Edu** (2024) - Highest quality publicly available pretraining dataset
-- 500k sequences × 1,024 tokens = 512M tokens total
-- Educational web content filtered for quality
-- Better than C4, The Pile, RefinedWeb
+**High-Quality Mix** - Llama 3 inspired composition
+- **65% FineWeb-Edu**: Educational web content (32.5M sequences = 33.3B tokens)
+- **25% Code**: StarCoder - Python, TypeScript, Rust, Go (12.5M sequences = 12.8B tokens)
+- **10% Math**: OpenMathInstruct-1 verified solutions (5M sequences = 5.1B tokens)
+- **Total**: 50M unique sequences = 51.2B unique tokens
+- **Training**: 10x repeats = 500B total tokens
+- **Quality**: FineWeb-Edu is 10x more efficient than C4, outperforms all open datasets
 
 ### Training Configuration
 
 ```python
-Global Batch Size: 512 (64 per device)
+Global Batch Size: 256 (8 per chip × 32 chips)
 Sequence Length: 1,024 tokens
 Optimizer: AdamW (β1=0.9, β2=0.95, weight_decay=0.1)
-Learning Rate: 6e-4 (warmup: 2k steps, cosine decay to 6e-5)
+Learning Rate: 3e-4 (warmup: 2k steps, cosine decay to 3e-5)
 Gradient Clipping: 1.0
 Precision: bfloat16
-Total Steps: 500,000
-Total Tokens: 500B
+Total Steps: 122,070
+Total Tokens: 500B (51.2B unique × 10 repeats)
 
 Parallelism Strategy:
-- Data Parallel: 8-way
-- FSDP (Fully Sharded Data Parallel): 2-way
-- Selective Gradient Checkpointing: Every 8th layer
+- Data Parallel: 4-way
+- Model Parallel: 8-way
+- Mesh: (4, 8) for TPU v4-32
 ```
 
 ### Performance
 
-- **Throughput**: 0.6-0.65M tokens/second
-- **MFU (Model FLOPs Utilization)**: 14-15%
 - **Training Time**: ~9 days for 500B tokens
 - **Cost**: TPU Research Cloud (free for research)
+- **Dataset Prep**: ~20 hours (TFRecord sharding to GCS)
+- **Total Pipeline**: 13 days (base + instruction tuning)
 
-### Checkpoints
+### Training Phases
 
-Automatic checkpoints saved at:
-- 10k steps (~52B tokens) - Early training
-- 20k steps (~105B tokens) - Warmup complete
-- 50k steps (~262B tokens) - Mid-training
-- 100k steps - Extended training
-- 250k steps - Late training
-- 500k steps (~500B tokens) - **FINAL**
+**Phase 1: Base Model Training** (~9 days)
+- 122,070 steps on 500B tokens
+- Checkpoints every 1,000 steps
+- Evaluation every 500 steps
+
+**Phase 2: Instruction Tuning** (~3 days)
+- Stage 1: General capabilities (Alpaca + ShareGPT)
+- Stage 2: Reasoning (OpenOrca + WizardLM)
+- Stage 3: DPO on Ultrafeedback (preference optimization)
+
+**Phase 3: Domain Specialization** (~1 day)
+- Code: CodeAlpaca + WizardCoder
+- Math: MetaMathQA
+- Reasoning: Advanced datasets
 
 Each checkpoint includes:
-- Full model weights (3.15B parameters)
+- Full model weights (3.2B parameters)
 - Optimizer state (for resuming)
 - Training configuration
 - Loss and metrics
@@ -166,19 +176,19 @@ step = ckpt['step']
 
 | Feature | Baseline (GPT-2 style) | Modern (This Model) |
 |---------|----------------------|---------------------|
-| Attention | Multi-Head (20 heads) | GQA (20Q / 4KV heads) |
+| Attention | Multi-Head (24 heads) | GQA (24Q / 4KV heads) |
 | Position | Learned embeddings | RoPE (no parameters) |
 | Activation | GELU | SwiGLU |
 | Normalization | LayerNorm | RMSNorm |
-| Parameters | 2.74B | 3.15B |
-| Inference Speed | 1.0x | **1.4x faster** |
+| Parameters | 2.9B | 3.2B |
+| Inference Speed | 1.0x | **1.5x faster** |
 | Quality | Baseline | **Higher** |
-| Memory Usage | 1.0x | **0.7x (KV cache)** |
+| Memory Usage | 1.0x | **0.67x (KV cache)** |
 
 ## Mobile Deployment
 
 4-bit quantized version:
-- Model size: 1.7GB (vs 6.3GB full precision)
+- Model size: 1.8GB (vs 6.4GB full precision)
 - Runs on iPhone, Android, laptops
 - Quality degradation: <3%
 
@@ -203,10 +213,12 @@ Coming soon:
 
 ## Project Timeline
 
-- **October 7, 2025**: Training started
-- **October 16-17, 2025**: Training completes (500B tokens)
-- **October 20, 2025**: Model release + full documentation
-- **October 29, 2025**: TRC project deadline
+- **October 7, 2025**: Data preparation started
+- **October 8-9, 2025**: TFRecord sharding completes (51.2B tokens)
+- **October 9-18, 2025**: Base model training (500B tokens)
+- **October 18-21, 2025**: Multi-stage instruction tuning + DPO
+- **October 21-28, 2025**: Evaluation, documentation, benchmarks
+- **October 29, 2025**: Final release + TRC submission
 
 ## Repository Structure
 
