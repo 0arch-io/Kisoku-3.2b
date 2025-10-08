@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """
-2.7B GPT Training on TPU v4-32 - QUALITY ABOVE ALL ELSE
-Architecture: GQA (20 query heads, 4 KV heads) + RoPE + SwiGLU + RMSNorm + bfloat16
-Dataset: 50B unique tokens, 10x repeats = 500B training tokens
+3.2B GPT Training on TPU v4-32 - QUALITY ABOVE ALL ELSE
+Architecture: GQA (24 query heads, 4 KV heads) + RoPE + SwiGLU + RMSNorm + bfloat16
+Dataset: 51.2B unique tokens, 10x repeats = 500B training tokens
 """
 
 import os
@@ -20,7 +20,7 @@ import numpy as np
 
 # Configuration
 class Config:
-    # Model architecture (3.1B parameters)
+    # Model architecture (3.2B parameters - EXACT: 3,203,778,240)
     vocab_size = 50257  # GPT-2 tokenizer
     seq_len = 1024
     d_model = 2880
@@ -50,10 +50,10 @@ class Config:
     mesh_shape = (4, 8)  # (data_parallel, model_parallel) for v4-32
 
 print("=" * 70)
-print("3.1B GPT TRAINING - QUALITY ABOVE ALL ELSE")
+print("3.2B GPT TRAINING - QUALITY ABOVE ALL ELSE")
 print("=" * 70)
-print(f"Model: {Config.d_model}d x {Config.n_layers}L = 3.1B params")
-print(f"Dataset: 500B tokens (50B unique, 10x repeats)")
+print(f"Model: {Config.d_model}d x {Config.n_layers}L = 3.2B params (3,203,778,240 exact)")
+print(f"Dataset: 500B tokens (51.2B unique, 10x repeats)")
 print(f"Batch size: {Config.batch_size} (global) = {Config.per_device_batch} per chip")
 print(f"Training steps: {Config.max_steps:,}")
 print(f"TPU: v4-32 ({jax.device_count()} chips)")

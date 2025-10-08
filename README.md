@@ -1,12 +1,12 @@
-# OpenMind 2.7B
+# OpenMind 3.2B
 
-**First Fully Open Community-Trained 2.7B Modern LLM on TPU v4**
+**First Fully Open Community-Trained 3.2B Modern LLM on TPU v4**
 
 [![Training](https://img.shields.io/badge/status-training-yellow)]() [![Architecture](https://img.shields.io/badge/architecture-GQA%20%2B%20RoPE%20%2B%20SwiGLU-blue)]() [![Dataset](https://img.shields.io/badge/dataset-FineWeb--Edu-green)]() [![Hardware](https://img.shields.io/badge/hardware-TPU%20v4--32-orange)]()
 
 ## Overview
 
-OpenMind 2.7B is a completely open community-trained language model with modern architecture (GQA, RoPE, SwiGLU) trained on Google's TPU v4-32. Unlike closed models from Meta, Google, Microsoft, and Apple, **everything is open**: training code, methodology, logs, checkpoints, and deployment guides.
+OpenMind 3.2B is a completely open community-trained language model with modern architecture (GQA, RoPE, SwiGLU) trained on Google's TPU v4-32. Unlike closed models from Meta, Google, Microsoft, and Apple, **everything is open**: training code, methodology, logs, checkpoints, and deployment guides.
 
 ## What Makes This Unique
 
@@ -145,8 +145,8 @@ pip install optax numpy
 
 ```bash
 # Clone the repository
-git clone https://github.com/0arch-io/openmind-2.7b.git
-cd openmind-2.7b
+git clone https://github.com/0arch-io/openmind-3.2b.git
+cd openmind-3.2b
 
 # Prepare dataset (instructions in docs/dataset.md)
 python scripts/prepare_fineweb.py
@@ -200,7 +200,7 @@ See `docs/quantization.md` for deployment guide.
 
 ### Loss Curve
 
-Training started October 7, 2025. Current status available at: https://github.com/0arch-io/openmind-2.7b/issues/1
+Training started October 7, 2025. Current status available at: https://github.com/0arch-io/openmind-3.2b/issues/1
 
 ### Benchmarks
 
@@ -223,8 +223,14 @@ Coming soon:
 ## Repository Structure
 
 ```
-openmind-2.7b/
+openmind-3.2b/
 ├── training/
+│   ├── train_3.2b.py            # Main training script (3.2B params)
+│   ├── prepare_dataset.py       # TFRecord shard creation
+│   ├── start_training.sh        # Quick-start training launcher
+│   ├── check_training.sh        # Training progress monitor
+│   ├── check_data_progress.sh   # Data prep progress checker
+│   ├── process_extra_fineweb.py # Extra FineWeb processing
 │   ├── train_modern.py          # Modern architecture (GQA + RoPE + SwiGLU)
 │   ├── train_baseline.py        # Baseline GPT-2 style (comparison)
 │   └── inference.py             # Inference code
@@ -248,11 +254,11 @@ If you use this model or training methodology in your research, please cite:
 
 ```bibtex
 @misc{openmind2025,
-  title={OpenMind 2.7B: Community-Trained Modern LLM on TPU v4},
+  title={OpenMind 3.2B: Community-Trained Modern LLM on TPU v4},
   author={0arch-io},
   year={2025},
-  url={https://github.com/0arch-io/openmind-2.7b},
-  note={First fully open community-trained 2.7B model with modern architecture}
+  url={https://github.com/0arch-io/openmind-3.2b},
+  note={First fully open community-trained 3.2B model with modern architecture}
 }
 ```
 

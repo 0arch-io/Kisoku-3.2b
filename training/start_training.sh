@@ -1,10 +1,10 @@
 #!/bin/bash
-# Quick-start training script for 3.1B GPT on TPU v4-32
+# Quick-start training script for 3.2B GPT on TPU v4-32
 
 set -e
 
 echo "=========================================="
-echo "3.1B GPT TRAINING - TPU v4-32"
+echo "3.2B GPT TRAINING - TPU v4-32"
 echo "=========================================="
 
 # Check data is ready
@@ -31,7 +31,7 @@ echo ""
 
 # Upload training script to all workers
 echo "Uploading training script to TPU workers..."
-gcloud compute tpus tpu-vm scp /tmp/train_2.7b_gpt.py openmind-2b:/tmp/ --zone us-central2-b --worker=all
+gcloud compute tpus tpu-vm scp /tmp/train_3.2b.py openmind-2b:/tmp/ --zone us-central2-b --worker=all
 
 echo ""
 echo "Starting training on all 4 workers..."
@@ -44,7 +44,7 @@ for w in 0 1 2 3; do
   gcloud compute tpus tpu-vm ssh openmind-2b \
     --zone us-central2-b \
     --worker=$w \
-    --command "nohup python3 /tmp/train_2.7b_gpt.py > /tmp/training_w${w}.log 2>&1 &" &
+    --command "nohup python3 /tmp/train_3.2b.py > /tmp/training_w${w}.log 2>&1 &" &
 done
 
 wait
