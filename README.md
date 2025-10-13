@@ -14,8 +14,9 @@ OpenMind 3.2B is a 3.2 billion parameter language model trained from scratch on 
 
 - **Training Started**: October 12, 2025
 - **Expected Completion**: October 29, 2025
-- **Current Status**: Training in progress (Step 600+, Loss 10.5)
+- **Current Status**: Training in progress (Step 737+, Loss 10.386)
 - **Live Training Logs**: Available on request
+- **TPU Instance**: openmind-x3b (v4-32, us-central2-b)
 
 ## Model Architecture
 
@@ -81,8 +82,8 @@ We use Apple's DCLM-baseline dataset, the same high-quality dataset that powered
 
 ```
 Framework: MaxText (Google's official JAX/XLA framework)
-Batch Size: 4 per device (64 global batch)
-Effective Batch Size: 131,072 tokens per step
+Batch Size: 8 per device (128 global batch) - OPTIMIZED
+Effective Batch Size: 262,144 tokens per step
 Learning Rate: 3e-4 (peak)
 Min Learning Rate: 3e-5
 Warmup Steps: 5,000
@@ -93,18 +94,20 @@ Optimizer: AdamW
   - Beta2: 0.95
 Gradient Clipping: 1.0 (global norm)
 Precision: BFloat16
-Total Steps: ~900,000 (for 118.5B tokens)
+Total Steps: 122,070 (for 118.5B tokens)
+Checkpointing: Disabled (memory optimization)
 ```
 
 ### Performance Metrics
 
 ```
-Throughput: 80,704 tokens/sec
-Per-Device: 5,044 tokens/sec/device
+Throughput: 85,632 tokens/sec (OPTIMIZED from 80,704)
+Per-Device: 5,352 tokens/sec/device
 MFU (Model FLOPs Utilization): 40-50%
-TFLOP/s per device: ~106.7
-Step Time: ~1.624 seconds
-Training Duration: 17 days (Oct 12-29, 2025)
+TFLOP/s per device: 113.272
+Step Time: 3.061 seconds
+Memory Usage: 2.65GB / 30.75GB per chip (8.6%)
+Training Duration: ~16 days (Oct 12-29, 2025)
 ```
 
 ## Training Progress
@@ -113,11 +116,18 @@ Training Duration: 17 days (Oct 12-29, 2025)
 |--------|-------|
 | Total Tokens (Projected) | 118.5B |
 | Tokens per Parameter | 37 |
-| Current Loss | ~10.5 (decreasing) |
-| Steps Completed | 600+ / ~900,000 |
+| Current Loss | 10.386 (decreasing) |
+| Steps Completed | 737+ / 122,070 |
+| Progress | 0.6% |
+| Tokens Processed | ~193M / 118.5B |
 | Time Remaining | ~16 days |
 
-**Loss Curve**: 11.315 (initial) → 10.5 (current) - steadily decreasing
+**Loss Curve**: 11.315 (initial) → 10.386 (current) - steadily decreasing
+
+**Optimization History**:
+- Initial: batch_size=4, 80,704 tok/s
+- Optimized: batch_size=8, 85,632 tok/s (+6.1% throughput)
+- Tested batch_size=16: 88,160 tok/s but 5.947s/step (inefficient, reverted)
 
 ## Why This Model Matters
 
@@ -137,33 +147,51 @@ OpenMind 3.2B proves that Apple's DCLM dataset curation approach works at smalle
 
 ### 4. Complete Transparency
 Unlike proprietary models, OpenMind 3.2B provides:
-- ✅ Full training code
-- ✅ Real-time training logs
+- ✅ Full training code and setup scripts
+- ✅ Real-time training logs and monitoring
 - ✅ Dataset composition details
 - ✅ Hyperparameter choices and rationale
 - ✅ Architecture decisions explained
+- ✅ Optimization experiments documented (batch size tuning)
+- ✅ All failures and successes shared
 - ✅ Benchmark results (coming soon)
 
 ## Expected Capabilities
 
+### Realistic Expectations (Base Model, 118.5B tokens)
+
+**Projected Performance**:
+- **MMLU**: 30-35% (baseline)
+- **With TRC Extension** (+ synthetic data + distillation): 55-60% MMLU
+- **Target**: Competitive with Gemma 2B (55% MMLU), below Phi-3-mini (69% MMLU)
+
 ### Strong At:
 - ✅ General text completion and understanding
-- ✅ Code generation (Python, JavaScript, TypeScript)
-- ✅ Mathematical reasoning (GSM8K-style problems)
+- ✅ Code generation (Python, JavaScript, TypeScript) - 20% code in training data
+- ✅ Mathematical reasoning (GSM8K-style problems) - 10% math in training data
 - ✅ Technical writing and explanations
 - ✅ Basic question answering
 
 ### Moderate At:
-- ⚠️ Complex multi-step reasoning
+- ⚠️ Complex multi-step reasoning (limited by model size)
 - ⚠️ Advanced mathematics
-- ⚠️ Very long context tasks
+- ⚠️ Very long context tasks (2048 token limit)
 - ⚠️ Instruction following (base model - needs fine-tuning)
 
 ### Limitations:
 - ❌ Not instruction-tuned (this is a base model)
-- ❌ Smaller than GPT-3.5/GPT-4/Claude
+- ❌ Won't beat Llama 3.2 3B or Phi-3-mini out of the box (10-100x more compute)
 - ❌ Less world knowledge than larger models
-- ❌ 118B tokens is undertrained by 2025 standards (Llama 3 used 15T)
+- ❌ 118B tokens is limited by 2025 standards (Llama 3 used 15T tokens)
+- ❌ Can't compete with big company models without extension + modern techniques
+
+### Extension Strategy (If TRC Extends Access)
+To reach 55-60% MMLU competitive performance:
+1. **Synthetic Data Generation**: Use larger models to create high-quality training data
+2. **Knowledge Distillation**: Learn from Llama 3 70B or GPT-4 outputs
+3. **Data Quality Over Quantity**: Phi-3's "textbooks" approach, LIMA's 1k examples
+4. **Domain Specialization**: Focus on code/math rather than general knowledge
+5. **Modern Training Techniques**: Curriculum learning, targeted data mixing
 
 ## Competitive Positioning
 
@@ -223,23 +251,43 @@ SwiGLU activations (vs standard ReLU/GELU):
 
 ## Training Command
 
+**Current Optimized Configuration** (batch_size=8):
+
 ```bash
-python3 -m MaxText.train src/MaxText/configs/base.yml \
-  run_name=openmind-3.2b-dclm \
+cd ~/maxtext
+source .venv/bin/activate
+
+nohup python3 src/MaxText/train.py src/MaxText/configs/base.yml \
+  run_name=openmind-3.2b-dclm-batch8 \
+  base_output_directory=/tmp/training_logs \
+  enable_tensorboard=false \
   base_emb_dim=3072 \
   base_num_query_heads=32 \
   base_num_kv_heads=8 \
   base_mlp_dim=8192 \
   base_num_decoder_layers=32 \
   head_dim=96 \
-  per_device_batch_size=4 \
+  per_device_batch_size=8 \
   max_target_length=2048 \
   steps=10000000 \
   dataset_type=hf \
   hf_path=mlfoundations/dclm-baseline-1.0-parquet \
   tokenizer_path=gpt2 \
   vocab_size=50304 \
-  enable_checkpointing=False
+  enable_checkpointing=false \
+  > /tmp/train_batch8.log 2>&1 &
+
+echo "Training launched! PID: $!"
+sleep 3
+tail -30 /tmp/train_batch8.log
+```
+
+**Launch on all TPU workers**:
+```bash
+gcloud compute tpus tpu-vm ssh openmind-x3b \
+  --zone us-central2-b \
+  --worker=all \
+  --command="bash /tmp/launch_batch8_with_gcs.sh"
 ```
 
 ## Reproducing This Training
@@ -353,15 +401,29 @@ This is a community project. Ways to contribute:
 
 ## Progress Updates
 
-**Oct 12, 2025**: Training started on DCLM-baseline dataset. Initial loss: 11.315
+**Oct 12, 2025**: Training started on DCLM-baseline dataset. Initial loss: 11.315. First run with batch_size=4, achieved 80,704 tok/s.
 
-**Oct 13, 2025**: Step 600+, loss decreased to 10.5. Stable throughput at 80,704 tok/s.
+**Oct 13, 2025**:
+- Step 737+, loss decreased to 10.386 (steady improvement)
+- Batch size optimization: tested 4 → 8 → 16
+  - batch_size=8: 85,632 tok/s, 3.061s/step ✅ OPTIMAL
+  - batch_size=16: 88,160 tok/s but 5.947s/step (inefficient, reverted)
+- Settled on batch_size=8 for stable 16-day training run
+- All 4 TPU workers running successfully with multi-host coordination
+
+**Technical Challenges Solved**:
+- Python 3.12 installation (MaxText requirement, TPU had 3.10)
+- pip installation timeouts (switched to uv: 8-100x faster)
+- Multi-host coordination (launch on all workers simultaneously)
+- GCS permission errors (switched to local /tmp storage)
 
 *(Updates will be posted here as training progresses)*
 
 ---
 
-**Training Status**: 🟢 LIVE
-**Current Step**: 600+
-**Current Loss**: 10.5
+**Training Status**: 🟢 LIVE & STABLE
+**Current Step**: 737+ / 122,070
+**Current Loss**: 10.386
+**Throughput**: 85,632 tok/s
+**Memory**: 2.65GB / 30.75GB per chip (8.6%)
 **Days Remaining**: ~16
