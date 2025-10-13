@@ -1,14 +1,18 @@
-# OpenMind 3.2B
+# 0ARCH Reiko 3.2B (零構)
 
-> A completely open community-trained language model. Training code, methodology, logs, checkpoints, and deployment guides—all public, all transparent.
+> **Reiko** (零構): "Foundational Structure" in Japanese. Building optimal AI from first principles through complete transparency and systematic optimization.
+
+A fully transparent language model trained from scratch on Google Cloud TPU v4-32. Every experiment, every failure, every optimization—documented and shared with the community.
 
 [![Training](https://img.shields.io/badge/status-training-yellow)]() [![Architecture](https://img.shields.io/badge/architecture-GQA%20%2B%20RoPE%20%2B%20SwiGLU-blue)]() [![Dataset](https://img.shields.io/badge/dataset-DCLM--Baseline-green)]() [![Hardware](https://img.shields.io/badge/hardware-TPU%20v4--32-orange)]()
 
 ## Overview
 
-OpenMind 3.2B is a 3.2 billion parameter language model trained from scratch on Google Cloud TPU v4-32 infrastructure. This project validates that Apple's DCLM (DataComp for Language Models) dataset approach works effectively at smaller model scales, providing an efficient open-source alternative for researchers and developers with limited compute resources.
+**0ARCH Reiko 3.2B** is a 3.2 billion parameter language model trained from scratch on Google Cloud TPU v4-32 infrastructure. Named after the Japanese concept of 零構 (rei-kō, "foundational structure"), Reiko embodies our approach: building optimal AI from first principles with complete transparency.
 
-**Key Differentiation**: First open 3B model trained on Apple's DCLM-baseline dataset, demonstrating that high-quality data curation transfers to smaller scales.
+This project validates that Apple's DCLM (DataComp for Language Models) dataset approach works effectively at smaller model scales, while creating the most comprehensive open-source training documentation to help future researchers maximize TPU efficiency.
+
+**Key Differentiation**: First open 3B model trained on Apple's DCLM-baseline dataset with complete optimization transparency. Every experiment documented—successes and failures—to help 100+ future TRC researchers train 2x faster.
 
 ## Status
 
@@ -44,7 +48,7 @@ Key Features:
 
 | Model | Params | Layers | Hidden | Heads | KV Heads | Context | Activation |
 |-------|--------|--------|--------|-------|----------|---------|------------|
-| OpenMind 3.2B | 3.2B | 32 | 3072 | 32 | 8 | 2048 | SwiGLU |
+| **Reiko 3.2B** | 3.2B | 32 | 3072 | 32 | 8 | 2048 | SwiGLU |
 | Llama 3.2 3B | 3.2B | 28 | 3072 | 24 | 8 | 8192 | SwiGLU |
 | Phi-2 | 2.7B | 32 | 2560 | 32 | - | 2048 | GeLU |
 | StableLM 3B | 3.0B | 32 | 2560 | 32 | - | 4096 | SwiGLU |
@@ -129,10 +133,10 @@ Training Duration: ~16 days (Oct 12-29, 2025)
 - Optimized: batch_size=8, 85,632 tok/s (+6.1% throughput)
 - Tested batch_size=16: 88,160 tok/s but 5.947s/step (inefficient, reverted)
 
-## Why This Model Matters
+## Why Reiko Matters
 
 ### 1. Data Quality Validation
-OpenMind 3.2B proves that Apple's DCLM dataset curation approach works at smaller scales. While Apple trained DCLM-7B on 2.5T tokens, we show strong performance with just 118.5B tokens on a 3.2B model.
+Reiko 3.2B proves that Apple's DCLM dataset curation approach works at smaller scales. While Apple trained DCLM-7B on 2.5T tokens, we show strong performance with just 118.5B tokens on a 3.2B model.
 
 ### 2. Efficient Alternative
 - **2× faster inference** than 7B models
@@ -146,7 +150,7 @@ OpenMind 3.2B proves that Apple's DCLM dataset curation approach works at smalle
 - Helps researchers with limited compute budgets
 
 ### 4. Complete Transparency
-Unlike proprietary models, OpenMind 3.2B provides:
+Unlike proprietary models, Reiko 3.2B provides:
 - ✅ Full training code and setup scripts
 - ✅ Real-time training logs and monitoring
 - ✅ Dataset composition details
@@ -209,7 +213,7 @@ To reach 55-60% MMLU competitive performance:
   - Better per-parameter efficiency for our compute budget
 
 ### Value Proposition:
-*"First open 3B model trained on Apple's DCLM dataset. Proves data quality transfers to smaller scales. Efficient alternative for researchers with limited compute, achieving competitive performance with 1/21 the training tokens of DCLM-7B."*
+*"Reiko (零構): First open 3B model trained on Apple's DCLM dataset with complete optimization transparency. Every experiment documented to help 100+ future TRC researchers maximize TPU efficiency and train 2x faster."*
 
 ## Benchmarks (Coming Soon)
 
@@ -354,12 +358,16 @@ Detailed guide: [TRAINING.md](TRAINING.md) *(coming soon)*
    - Open weights and code
    - Community-driven development
 
-## Why "OpenMind"?
+## Why "Reiko" (零構)?
 
-We believe AI development should be open, transparent, and accessible. OpenMind represents:
-- **Open**: All training details, code, and weights public
-- **Mind**: Focus on quality data and thoughtful architecture
-- **Community**: Built with and for the AI research community
+**Reiko** (零構) means "foundational structure" in Japanese, combining:
+- **零** (rei) = zero, connecting to **0ARCH** branding
+- **構** (kō) = structure/architecture
+
+This represents our philosophy:
+- **First Principles**: Building from zero/foundational understanding
+- **Transparent Architecture**: Every structural decision documented
+- **Community Foundation**: Creating a knowledge base for future builders
 
 ## License
 
@@ -391,11 +399,12 @@ This is a community project. Ways to contribute:
 ## Citation
 
 ```bibtex
-@software{openmind2025,
-  title={OpenMind 3.2B: Validating DCLM Dataset Quality at Smaller Scale},
-  author={0arch.io},
+@software{reiko2025,
+  title={0ARCH Reiko 3.2B: Foundational Structure for Transparent AI Training},
+  author={0ARCH},
   year={2025},
-  url={https://github.com/0arch-io/openmind-3.2b}
+  url={https://github.com/0arch-io/openmind-3.2b},
+  note={Reiko (零構): First principles approach to LLM training with complete optimization transparency}
 }
 ```
 
