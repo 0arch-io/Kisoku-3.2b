@@ -1,6 +1,6 @@
-# 0ARCH Reiko 3.2B (零構)
+# 0ARCH Kisoku 3.2B (規則)
 
-> **Reiko** (零構): "Foundational Structure" in Japanese. Building optimal AI from first principles through complete transparency and systematic optimization.
+> **Kisoku** (規則): "Principles" in Japanese. Building optimal AI through rigorous methodology, systematic optimization, and complete transparency.
 
 A fully transparent language model trained from scratch on Google Cloud TPU v4-32. Every experiment, every failure, every optimization—documented and shared with the community.
 
@@ -8,7 +8,7 @@ A fully transparent language model trained from scratch on Google Cloud TPU v4-3
 
 ## Overview
 
-**0ARCH Reiko 3.2B** is a 3.2 billion parameter language model trained from scratch on Google Cloud TPU v4-32 infrastructure. Named after the Japanese concept of 零構 (rei-kō, "foundational structure"), Reiko embodies our approach: building optimal AI from first principles with complete transparency.
+**0ARCH Kisoku 3.2B** is a 3.2 billion parameter language model trained from scratch on Google Cloud TPU v4-32 infrastructure. Named after the Japanese concept of 規則 (kisoku, "principles"), Kisoku embodies our approach: building optimal AI through rigorous methodology and systematic optimization.
 
 This project validates that Apple's DCLM (DataComp for Language Models) dataset approach works effectively at smaller model scales, while creating the most comprehensive open-source training documentation to help future researchers maximize TPU efficiency.
 
@@ -48,7 +48,7 @@ Key Features:
 
 | Model | Params | Layers | Hidden | Heads | KV Heads | Context | Activation |
 |-------|--------|--------|--------|-------|----------|---------|------------|
-| **Reiko 3.2B** | 3.2B | 32 | 3072 | 32 | 8 | 2048 | SwiGLU |
+| **Kisoku 3.2B** | 3.2B | 32 | 3072 | 32 | 8 | 2048 | SwiGLU |
 | Llama 3.2 3B | 3.2B | 28 | 3072 | 24 | 8 | 8192 | SwiGLU |
 | Phi-2 | 2.7B | 32 | 2560 | 32 | - | 2048 | GeLU |
 | StableLM 3B | 3.0B | 32 | 2560 | 32 | - | 4096 | SwiGLU |
@@ -133,10 +133,10 @@ Training Duration: ~16 days (Oct 12-29, 2025)
 - Optimized: batch_size=8, 85,632 tok/s (+6.1% throughput)
 - Tested batch_size=16: 88,160 tok/s but 5.947s/step (inefficient, reverted)
 
-## Why Reiko Matters
+## Why Kisoku Matters
 
 ### 1. Data Quality Validation
-Reiko 3.2B proves that Apple's DCLM dataset curation approach works at smaller scales. While Apple trained DCLM-7B on 2.5T tokens, we show strong performance with just 118.5B tokens on a 3.2B model.
+Kisoku 3.2B proves that Apple's DCLM dataset curation approach works at smaller scales. While Apple trained DCLM-7B on 2.5T tokens, we show strong performance with just 118.5B tokens on a 3.2B model.
 
 ### 2. Efficient Alternative
 - **2× faster inference** than 7B models
@@ -150,7 +150,7 @@ Reiko 3.2B proves that Apple's DCLM dataset curation approach works at smaller s
 - Helps researchers with limited compute budgets
 
 ### 4. Complete Transparency
-Unlike proprietary models, Reiko 3.2B provides:
+Unlike proprietary models, Kisoku 3.2B provides:
 - ✅ Full training code and setup scripts
 - ✅ Real-time training logs and monitoring
 - ✅ Dataset composition details
@@ -213,7 +213,7 @@ To reach 55-60% MMLU competitive performance:
   - Better per-parameter efficiency for our compute budget
 
 ### Value Proposition:
-*"Reiko (零構): First open 3B model trained on Apple's DCLM dataset with complete optimization transparency. Every experiment documented to help 100+ future TRC researchers maximize TPU efficiency and train 2x faster."*
+*"Kisoku (規則): First open 3B model trained on Apple's DCLM dataset with complete optimization transparency. Every experiment documented to help 100+ future TRC researchers maximize TPU efficiency and train 2x faster."*
 
 ## Benchmarks (Coming Soon)
 
@@ -358,16 +358,14 @@ Detailed guide: [TRAINING.md](TRAINING.md) *(coming soon)*
    - Open weights and code
    - Community-driven development
 
-## Why "Reiko" (零構)?
+## Why "Kisoku" (規則)?
 
-**Reiko** (零構) means "foundational structure" in Japanese, combining:
-- **零** (rei) = zero, connecting to **0ARCH** branding
-- **構** (kō) = structure/architecture
+**Kisoku** (規則) means "principles" or "rules" in Japanese, representing our approach:
+- **Rigorous Methodology**: Systematic optimization and experimentation
+- **Principled Design**: Every decision backed by measurement and analysis
+- **Documented Standards**: Creating reproducible best practices for the community
 
-This represents our philosophy:
-- **First Principles**: Building from zero/foundational understanding
-- **Transparent Architecture**: Every structural decision documented
-- **Community Foundation**: Creating a knowledge base for future builders
+This embodies our philosophy of building AI through transparent, principled engineering rather than black-box training.
 
 ## License
 
@@ -399,12 +397,12 @@ This is a community project. Ways to contribute:
 ## Citation
 
 ```bibtex
-@software{reiko2025,
-  title={0ARCH Reiko 3.2B: Foundational Structure for Transparent AI Training},
+@software{kisoku2025,
+  title={0ARCH Kisoku 3.2B: Principled Approach to Transparent AI Training},
   author={0ARCH},
   year={2025},
   url={https://github.com/0arch-io/openmind-3.2b},
-  note={Reiko (零構): First principles approach to LLM training with complete optimization transparency}
+  note={Kisoku (規則): Rigorous methodology and complete optimization transparency for LLM training}
 }
 ```
 

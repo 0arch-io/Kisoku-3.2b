@@ -1,7 +1,7 @@
-# TRC Extension Proposal: 0ARCH Reiko 3.2B (零構)
+# TRC Extension Proposal: 0ARCH Kisoku 3.2B (規則)
 
-**Project**: 0ARCH Reiko 3.2B - Maximum Efficiency LLM Training on Apple's DCLM Dataset
-**Name Meaning**: Reiko (零構) = "Foundational Structure" in Japanese
+**Project**: 0ARCH Kisoku 3.2B - Maximum Efficiency LLM Training on Apple's DCLM Dataset
+**Name Meaning**: Kisoku (規則) = "Principles" in Japanese
 **Current Allocation**: TPU v4-32, October 12-29, 2025 (17 days)
 **Extension Request**: Additional 24 days (total: 41 days)
 **Submitted**: October 13, 2025
@@ -269,9 +269,9 @@ If extension is not approved, Phase 1 still delivers:
 
 ## Comparison to Other TRC Projects
 
-### Why Fund 0ARCH Reiko 3.2B vs Other Projects?
+### Why Fund 0ARCH Kisoku 3.2B vs Other Projects?
 
-| Criteria | Reiko 3.2B | Typical Project |
+| Criteria | Kisoku 3.2B | Typical Project |
 |----------|---------------|-----------------|
 | **MFU Achieved** | 40-50% | 20-30% |
 | **Documentation** | Complete (every experiment) | Minimal |

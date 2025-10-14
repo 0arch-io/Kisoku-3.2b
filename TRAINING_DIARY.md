@@ -1,6 +1,6 @@
-# 0ARCH Reiko 3.2B (零構): Training Diary & Optimization Journey
+# 0ARCH Kisoku 3.2B (規則): Training Diary & Optimization Journey
 
-**Reiko** (零構) means "foundational structure" — building optimal AI from first principles.
+**Kisoku** (規則) means "principles" — building optimal AI through rigorous methodology and systematic optimization.
 
 **Project Goal**: Train the most thoroughly documented 3B parameter language model, validating Apple's DCLM data quality thesis at smaller scales while maximizing TPU v4-32 efficiency.
 
@@ -290,7 +290,7 @@ Actual: ~1.0s (2.6x overhead from protocol/barriers)
 ## Repository Structure
 
 ```
-reiko-3.2b/  (0ARCH Reiko)
+kisoku-3.2b/  (0ARCH Kisoku)
 ├── README.md              # Project overview
 ├── TRAINING_NOTES.md      # Technical setup guide
 ├── TRAINING_DIARY.md      # This file - daily updates
