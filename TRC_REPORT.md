@@ -610,9 +610,120 @@ This project is **fully open-source** under MIT license:
 
 ---
 
-## 9. Acknowledgments
+## 9. Request for Extension Period
 
-### 9.1 Google TPU Research Cloud
+### 9.1 Why This Matters
+
+I've successfully completed the core training (100k steps, 41% MFU, survived AWS outage), but the **real value to the research community** comes from what happens next: benchmarks, model release, and validation. Right now, Kisoku is a 35.4 GB Orbax checkpoint that only I can load. That's not useful to anyone.
+
+### 9.2 What I Need More Time For
+
+**3 concrete deliverables, 2-3 months**:
+
+1. **Benchmark Evaluation** (1-2 weeks)
+   - MMLU (general knowledge)
+   - HumanEval (code generation)
+   - GSM8K (math reasoning)
+   - Document results vs other 3B models (Phi-3, StableLM, OpenELM)
+   - **Why it matters**: Validate if DCLM-baseline + 100k steps = competitive performance
+
+2. **Model Release to HuggingFace** (2-3 weeks)
+   - Convert Orbax → HuggingFace Transformers format
+   - Upload weights to HuggingFace Hub
+   - Create model card with training details
+   - Enable `transformers.AutoModel.from_pretrained("0arch/kisoku-3.2b")`
+   - **Why it matters**: First open-source 3.2B DCLM-baseline model with full training logs
+
+3. **Extended Training Experiments** (1-2 months)
+   - Continue training to 150k-200k steps (validate if more tokens → better results)
+   - Test targeted data mixing (more code/math vs more web content)
+   - Run ablation studies: batch size 4 vs 8 vs 16 for full convergence
+   - Document scaling laws for 3.2B parameter range
+   - **Why it matters**: Real science = validation, not just one training run
+
+### 9.3 Compute Estimate
+
+**Total additional TPU time needed**: ~5-7 days of v4-32
+
+| Task | TPU Time | Why |
+|------|----------|-----|
+| Benchmark evaluation | 4-6 hours | MMLU/HumanEval/GSM8K inference |
+| Checkpoint conversion testing | 2-3 hours | Orbax → HF validation |
+| Extended training (50k more steps) | 1.75 days | 50k steps @ 3.061s/step |
+| Ablation studies (batch size experiments) | 2-3 days | Re-run key sections with different configs |
+| Data mixing experiments | 1-2 days | Test code-heavy vs web-heavy splits |
+
+**Total**: ~5-7 days spread over 2-3 months
+
+### 9.4 What You Get From This
+
+**If extended, the community gets**:
+
+1. **Open-source 3.2B model** on HuggingFace Hub (weights + training code + full docs)
+2. **Benchmark results** proving DCLM-baseline viability for small models
+3. **Scaling law validation** at 3.2B parameter count (underexplored in literature)
+4. **Production best practices** for multi-month TPU training projects
+5. **Educational resource** for students/researchers learning distributed ML
+
+**If not extended, the community gets**:
+- Training logs and documentation (useful, but incomplete)
+- No model weights (35 GB Orbax checkpoint not broadly usable)
+- No benchmarks (can't validate if training actually worked)
+- No scientific validation (one training run ≠ reproducible science)
+
+### 9.5 Why I Won't Waste This
+
+**Track record from current allocation**:
+- ✅ Used 100% of granted time productively (no idle TPUs)
+- ✅ Documented every step (TRC_REPORT.md, TRAINING_NOTES.md, GitHub)
+- ✅ Solved real problems (AWS outage recovery, GCS permissions, batch size optimization)
+- ✅ Shared everything publicly (MIT license, full reproducibility)
+- ✅ Responded to infrastructure failures professionally (recovered from AWS outage, didn't give up)
+
+**What I'm NOT asking for**:
+- ❌ Indefinite access
+- ❌ Larger TPUs (v4-32 is perfect for this scale)
+- ❌ Just "playing around" (every experiment documented and justified)
+
+### 9.6 The Honest Truth
+
+I finished training because I **didn't want to waste TRC's investment** in me. I could have kept going, but I hit 100k steps (my stated goal) and wanted to deliver what I promised.
+
+But finishing training isn't the same as finishing the **science**. Right now, I have:
+- ✅ A trained model (Kisoku 3.2B)
+- ✅ Documentation of the process
+- ❌ No idea if it's actually good (no benchmarks)
+- ❌ No way for others to use it (not on HuggingFace)
+- ❌ No validation that 100k steps was optimal (could need 150k? 200k?)
+
+**The ask**: 2-3 more months to finish the science properly. Benchmark it, release it, validate it, and make it useful to the ML community.
+
+**The commitment**: If extended, I'll treat this like a real research project. Weekly progress updates, public documentation, and concrete deliverables. No wasted TPU hours, no idle resources.
+
+### 9.7 Timeline (If Extended)
+
+**Month 1: Validation & Release**
+- Week 1-2: Checkpoint conversion (Orbax → HuggingFace)
+- Week 3: Benchmark evaluation (MMLU, HumanEval, GSM8K)
+- Week 4: HuggingFace Hub release + documentation
+
+**Month 2: Extended Training**
+- Continue to 150k steps (validate if more tokens help)
+- Document loss curves, checkpoint performance at 110k, 120k, 130k, 140k, 150k
+- Update benchmarks at each milestone
+
+**Month 3: Scientific Validation**
+- Ablation studies (batch size, data mixing)
+- Scaling law analysis
+- Final report: "Training 3.2B Models on TPU v4: A Complete Guide"
+
+**Deliverables**: Open-source model + benchmarks + extended documentation
+
+---
+
+## 10. Acknowledgments
+
+### 10.1 Google TPU Research Cloud
 
 **Immense gratitude** to the Google TPU Research Cloud (TRC) program for providing:
 - TPU v4-32 access (16 chips, 4 hosts)
@@ -622,7 +733,7 @@ This project is **fully open-source** under MIT license:
 
 Without TRC, this research would not have been possible. The program democratizes access to cutting-edge AI hardware and enables independent researchers to train state-of-the-art models.
 
-### 9.2 Open Source Community
+### 10.2 Open Source Community
 
 **Frameworks and Tools**:
 - **MaxText Team** (Google AI Hypercomputer) - production-grade TPU training
@@ -636,7 +747,7 @@ Without TRC, this research would not have been possible. The program democratize
 - **OpenAI** - GPT-2 tokenizer
 - **EleutherAI** - evaluation harness and benchmarks
 
-### 9.3 Community Support
+### 10.3 Community Support
 
 Special thanks to:
 - TPU Research Cloud support team for rapid responses
@@ -646,7 +757,7 @@ Special thanks to:
 
 ---
 
-## 10. Conclusion
+## 11. Conclusion
 
 Training Kisoku 3.2B on TPU v4-32 via the TPU Research Cloud program was a **resounding success**:
 
