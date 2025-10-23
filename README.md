@@ -17,12 +17,12 @@ This project validates that Apple's DCLM (DataComp for Language Models) dataset 
 ## Status
 
 - **Training Started**: October 19, 2025
-- **Expected Completion**: October 22, 2025 (~3.5 days total)
-- **Current Status**: Training in progress (Step 35,383/100,000, 35.4% complete)
-- **Current Loss**: 3.0 (down from 10.3 initial)
+- **Training Completed**: October 23, 2025 (~3.5 days total)
+- **Current Status**: ✅ TRAINING COMPLETE (Step 100,000/100,000, 100% complete)
+- **Final Loss**: 2.733 (down from 10.3 initial)
 - **Run Name**: kisoku-3.2b-GCS
 - **TPU Instance**: openmind-x3b (v4-32, us-central2-b)
-- **Checkpoints**: Every 5k steps to gs://pantheon-tpu-training/kisoku-checkpoints/
+- **Checkpoints**: 21 checkpoints saved (every 5k steps from 0 to 99,999)
 
 ## Model Architecture
 
@@ -110,27 +110,36 @@ Checkpoint Path: gs://pantheon-tpu-training/kisoku-checkpoints/
 ```
 Throughput: 85,632 tokens/sec
 Per-Device: 5,352 tokens/sec/device
-MFU (Model FLOPs Utilization): 40-50%
+MFU (Model FLOPs Utilization): 41%
 TFLOP/s per device: 113.3
 Step Time: 3.061 seconds
 Memory Usage: 2.65GB / 30.75GB per chip (8.6%)
-Training Duration: ~3.5 days (Oct 19-22, 2025)
+Training Duration: 3.5 days (Oct 19-23, 2025)
+Total Tokens Processed: 26.2B tokens
 ```
 
 ## Training Progress
 
 | Metric | Value |
 |--------|-------|
-| Total Tokens (Target) | 26.2B |
-| Tokens per Parameter | 8.2 |
-| Current Loss | 3.0 (down from 10.3 initial) |
-| Steps Completed | 35,383 / 100,000 |
-| Progress | 35.4% |
-| Tokens Processed | ~9.3B / 26.2B |
-| Time Remaining | ~2.3 days |
-| Expected Completion | October 22, 2025 |
+| Total Tokens | 26.2B |
+| Tokens per Parameter | 7.5 |
+| Final Loss | 2.733 (down from 10.3 initial) |
+| Steps Completed | 100,000 / 100,000 |
+| Progress | 100% ✅ COMPLETE |
+| Tokens Processed | 26.2B / 26.2B |
+| Training Time | 3.5 days |
+| Completion Date | October 23, 2025 |
 
-**Loss Curve**: 10.3 (initial) → 3.0 (current) - excellent convergence
+**Loss Curve**: 10.3 (initial) → 2.733 (final) - excellent convergence (73.5% loss reduction)
+
+**Achievement Summary**:
+- ✅ 100,000 steps completed successfully
+- ✅ 26.2B tokens processed (262,144 tokens/step × 100k steps)
+- ✅ 21 checkpoints saved (every 5k steps: 0, 4999, 9999, ..., 94999, 99999)
+- ✅ Zero crashes after AWS outage recovery
+- ✅ Industry-competitive 41% MFU on TPU v4-32
+- ✅ Final checkpoint: gs://pantheon-tpu-training/kisoku-checkpoints/kisoku-3.2b-GCS/checkpoints/99999
 
 **AWS Outage Recovery**: Successfully recovered from checkpoint 35,000 after training crashed at step 36,952 due to HuggingFace CDN failures during major AWS US-EAST-1 outage (October 20, 2025). Lost ~2,000 steps but validates our 5k checkpointing strategy.
 
@@ -223,9 +232,9 @@ To reach 55-60% MMLU competitive performance:
 ### Value Proposition:
 *"Kisoku (規則): First open 3B model trained on Apple's DCLM dataset with complete optimization transparency. Every experiment documented to help 100+ future TRC researchers maximize TPU efficiency and train 2x faster."*
 
-## Benchmarks (Coming Soon)
+## Benchmarks (In Progress)
 
-After training completes (Oct 22), we will evaluate on:
+Training completed October 23, 2025. Now evaluating on:
 - **MMLU** (Massive Multitask Language Understanding)
 - **HumanEval** (Code generation)
 - **GSM8K** (Math reasoning)
@@ -323,14 +332,14 @@ Detailed guide: [TRAINING_NOTES.md](TRAINING_NOTES.md)
 
 ## Roadmap
 
-### Phase 1: Base Model Training (Current)
+### Phase 1: Base Model Training (✅ COMPLETE)
 - [x] Architecture finalization
 - [x] Dataset selection (DCLM-baseline)
 - [x] Training infrastructure setup
 - [x] GCS checkpointing implementation
 - [x] AWS outage recovery validation
-- [ ] Complete 26.2B token training (Oct 22)
-- [ ] Export final weights
+- [x] Complete 26.2B token training (Oct 23, 2025)
+- [ ] Export final weights to HuggingFace format
 
 ### Phase 2: Evaluation (Late Oct 2025)
 - [ ] MMLU benchmarks
@@ -433,13 +442,22 @@ This is a community project. Ways to contribute:
 - **Validates GCS checkpointing strategy**: 5k step intervals proved optimal
 - **Multi-cloud resilience**: Training on GCP with GCS survived AWS failures
 
-**Oct 20, 2025 - Current Status** (Post-Recovery):
+**Oct 20, 2025 - Post-Recovery Status**:
 - Step 35,383 / 100,000 (35.4% complete)
 - Loss: 3.0 (excellent convergence from 10.3 initial)
 - Throughput: 85,632 tok/s, 5,352 tok/s per device
 - Performance: 113.3 TFLOP/s per device
 - Expected completion: October 22, 2025
 - All 4 TPU workers running successfully with multi-host coordination
+
+**Oct 23, 2025 - TRAINING COMPLETE**:
+- ✅ Final step: 100,000 / 100,000 (100% complete)
+- ✅ Final loss: 2.733 (73.5% reduction from initial 10.3)
+- ✅ Total tokens: 26.2B tokens processed
+- ✅ Total time: 3.5 days (Oct 19-23, 2025)
+- ✅ Checkpoints: 21 checkpoints saved successfully
+- ✅ Zero crashes after AWS recovery
+- ✅ Final checkpoint: gs://pantheon-tpu-training/kisoku-checkpoints/kisoku-3.2b-GCS/checkpoints/99999
 
 **Technical Challenges Solved**:
 - Python 3.12 installation (MaxText requirement, TPU had 3.10)
@@ -452,10 +470,10 @@ This is a community project. Ways to contribute:
 
 ---
 
-**Training Status**: 🟢 LIVE & RECOVERING
-**Current Step**: 35,383 / 100,000 (35.4%)
-**Current Loss**: 3.0
-**Throughput**: 85,632 tok/s
-**Memory**: 2.65GB / 30.75GB per chip (8.6%)
-**Time Remaining**: ~2.3 days
-**Expected Completion**: October 22, 2025
+**Training Status**: ✅ COMPLETE
+**Final Step**: 100,000 / 100,000 (100%)
+**Final Loss**: 2.733
+**Throughput**: 85,632 tok/s (41% MFU)
+**Total Tokens**: 26.2B tokens
+**Training Duration**: 3.5 days (Oct 19-23, 2025)
+**Completion Date**: October 23, 2025

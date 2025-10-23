@@ -1,6 +1,6 @@
 # Training Notes & Complete Setup Guide
 
-## Current Training (Oct 19-22, 2025)
+## Current Training (Oct 19-23, 2025)
 
 **IMPORTANT**: The actual production training is using **MaxText**, not the custom JAX scripts in this repo.
 
@@ -8,7 +8,7 @@
 
 **Framework**: MaxText (Google's official JAX/XLA framework)
 **TPU**: openmind-x3b (v4-32, us-central2-b)
-**Status**: 🟢 LIVE & RECOVERING (Step 35,383/100,000, Loss 3.0)
+**Status**: ✅ COMPLETE (Step 100,000/100,000, Final Loss 2.733)
 **Run Name**: kisoku-3.2b-GCS
 
 **Production Command** (with GCS checkpointing):
@@ -80,19 +80,21 @@ Training is running on TPU v4-32 (openmind-x3b) in us-central2-b:
 
 ### Performance (Production Run)
 
-Current metrics (post-AWS outage recovery):
+Final metrics (training complete):
 ```
 Throughput: 85,632 tokens/sec
 Per-device: 5,352 tokens/sec
-MFU: 40-50%
+MFU: 41% (industry-competitive)
 TFLOP/s per device: 113.3
 Step time: 3.061 seconds
 Memory usage: 2.65GB / 30.75GB per chip (8.6%)
-Current step: 35,383 / 100,000 (35.4%)
-Current loss: 3.0 (down from 10.3 initial)
-Time remaining: ~2.3 days
-Expected completion: October 22, 2025
+Final step: 100,000 / 100,000 (100% COMPLETE)
+Final loss: 2.733 (down from 10.3 initial - 73.5% reduction)
+Total training time: 3.5 days (Oct 19-23, 2025)
+Completed: October 23, 2025
 Total tokens: 26.2B tokens (100k steps × 262k tokens/step)
+Checkpoints: 21 saved (every 5k steps from 0 to 99,999)
+Errors since recovery: 0 (zero crashes)
 ```
 
 ### Batch Size Optimization History
@@ -368,7 +370,7 @@ gsutil ls gs://pantheon-tpu-training/kisoku-checkpoints/
 - With 5k step checkpointing, maximum loss is ~6 hours of training
 - **Prevention**: Consider local dataset caching for critical production runs
 
-## Next Steps After Training (Oct 22)
+## Next Steps After Training (Completed Oct 23, 2025)
 
 1. Export final checkpoint from MaxText
 2. Convert to HuggingFace format
